@@ -117,7 +117,7 @@ def add_document(document_type, number, name, shelf):
         rprint("Доступные типы документов:")
         print(*document_types, sep='\n')
         print()
-        return False
+        return
 
     # проверить, существует ли документ
     if is_this_a_document(number):
@@ -129,7 +129,7 @@ def add_document(document_type, number, name, shelf):
     #  проверка существует ли полка
     if not is_this_a_shelf(shelf):
         rprint_error("Полки не существует")
-        return False
+        return
     documents.append({"type": document_type, "number": number, "name": name})
     directories[shelf].append(number)
     rprint("Документ создан и помещен на полку")
