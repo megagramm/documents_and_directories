@@ -4,18 +4,14 @@ def main():
         user_comand = input('Введите команду: ')
         if user_comand == 'p':
             get_man_by_document(input('Укажите номер документа: '))
-            continue
         elif user_comand == 's':
             get_shelf_by_number(input('Укажите номер документа: '))
-            continue
         elif user_comand == 'l':
             get_all_documents()
-            continue
         elif user_comand == 'a':
             add_document(input('Тип документа: '), input('Укажите номер документа: '), input('Укажите Имя: '),
                          input('Укажите название полки: '))
-            continue
-        if user_comand == 'd':
+        elif user_comand == 'd':
             delete_document(input('Укажите номер документа: '))
         elif user_comand == 'm':
             move_document(input('Укажите номер документа: '), input('Укажите название полки: '))
@@ -152,7 +148,7 @@ def delete_document(document):
 
     if not is_this_a_document(document):
         rprint_error("Документа не существует")
-        return False
+        return
     # удаляем документ с полки
     shelf = get_shelf_by_document(document)
     if shelf:
@@ -162,27 +158,25 @@ def delete_document(document):
         if doc['number'] == document:
             documents.remove(doc)
             rprint('Документ удалён')
-            return True
-    return False
+            return
 
 
 def delete_document_from_shelf(document, shelf):
     """Удаляет документ с полки"""
     if not is_this_a_shelf(shelf):
         rprint_error("Полка не существует")
-        return False
+        return
 
     if not is_this_a_document(document):
         rprint_error("Документа не существует")
-        return False
+        return
 
     if document in directories[shelf]:
         directories[shelf].remove(document)
         rprint('Документ удалён с полки')
-        return True
+        return
     else:
         rprint_error('На указаной полке нет этого документа')
-    return False
 
 
 def move_document(document, shelf):
@@ -199,18 +193,18 @@ def move_document(document, shelf):
     shelf_source = get_shelf_by_document(document)
     if not shelf_source:
         rprint_error("Документ не привязан ни одной полке")
-        return False
+        return
     else:
         # проверяем не совпадает ли источник и цель назначения
         if shelf_source == shelf:
             rprint_error("Документ уже лежит на этой полке")
-            return False
+            return
         else:
             # создаем документ в указанной полке, удаляем документ в текущей полке
             directories[shelf_source].remove(document)
             directories[shelf].append(document)
             rprint('Документ перемещён')
-            return True
+            return
 
 
 def get_shelf_by_document(document):
@@ -218,7 +212,6 @@ def get_shelf_by_document(document):
     for shelf, items in directories.items():
         if document in items:
             return shelf
-    return False
 
 
 def is_this_a_shelf(shelf):
@@ -231,10 +224,9 @@ def add_shelf(shelf):
     if not is_this_a_shelf(shelf):
         directories[shelf] = []
         rprint('Полка добавлена')
-        return True
+        return
     else:
         rprint_error('Уже существует')
-    return False
 
 
 def delete_shelf(shelf):
@@ -243,15 +235,14 @@ def delete_shelf(shelf):
         if len(directories[shelf]) == 0:
             directories.pop(shelf)
             rprint('Полка удалена')
-            return True
+            return
         else:
             rprint_error('Полка не пустая.')
             rprint('Сначала перенесите все')
             rprint('документы или удалите')
-            return False
+            return
     else:
         rprint_error('Полки не существует')
-        return False
 
 
 def list_shelfs():
@@ -264,4 +255,6 @@ def list_shelfs():
             empty_shelf = '      '
         print(f'Полка: {empty_shelf} {key} документы: {values}')
     print()
+
+
 main()
